@@ -8,9 +8,10 @@ public class EjercicioJ_2019 {
 	private static ArrayList<String> lineas;
 	private static int altura;
 	private static int anchura;
-	private static byte[][] graph;
+	private static char[][] graph;
 	
 	private static ArrayList<String> lineasDummy;
+	private static int posicionPintado;
 	
 	static{
 		lineasDummy = new ArrayList<>();
@@ -39,8 +40,8 @@ public class EjercicioJ_2019 {
 
 	private static void procesarGrafica(String linea) {
 		anchura = linea.length();
-		altura  = linea.length() - linea.replace("/", "").length();
-		graph = new byte[altura][anchura+2];
+		altura  = linea.length() - linea.replace("S", "").length();
+		graph = new char[altura][anchura+2];
 		drawFirstLine();
 		drawGraph(linea);
 		drawLastLine();
@@ -49,42 +50,45 @@ public class EjercicioJ_2019 {
 
 
 	private static void drawGraph(String linea) {
-		int posicionPintado=altura; 
+		posicionPintado = altura-1; 
 		for (int i = 0; i < altura; i++) {
 			graph[i][0]='#';
-			graph[i][anchura+2]='#';
+			graph[i][anchura+1]='#';
 		}
-		for (int i = 1; i < anchura+2; i++) {
-			if(posicionPintado<0)throw new RuntimeException("no puedo pintar debajo de cero");
-			posicionPintado-=drawGraph(graph[posicionPintado][i],linea.charAt(i));
+		for (int i = 0; i < linea.length()-1; i++) {
+			if(posicionPintado<0)posicionPintado=0;
+			char charAt = linea.charAt(i);
+			graph[posicionPintado][i+1]=drawGraph(charAt);
 		}
-		System.out.println(graph);
+		for (int i = 0; i < graph.length; i++) {
+			System.out.println(graph[i]);
+		}
 	}
 
 
 
-	private static int drawGraph(byte where, char icon) {
-		int nivel = 0;
+	private static char drawGraph(char icon) {
+		char where = 0;
 		switch(icon) {
 			case 'S':
+				posicionPintado-=1;
 				where = '/';
-				nivel=+1;
 				break;
 			case 'B':
+				posicionPintado+=1;
 				where = '\\';
-				nivel=-1;
 				break;
 			case 'I':
 				where = '_'; 
 				break;
 		}
-		return nivel;
+		return where;
 	}
 
 
 
 	private static void drawLastLine() {
-		char[] c = new char[anchura];
+		char[] c = new char[anchura+2];
 		Arrays.fill(c, '#');
 		String beginEnd = new String(c);
 		System.out.println(beginEnd);
@@ -93,7 +97,7 @@ public class EjercicioJ_2019 {
 
 
 	private static void drawFirstLine() {
-		char[] c = new char[anchura];
+		char[] c = new char[anchura+2];
 		Arrays.fill(c, '#');
 		String beginEnd = new String(c);
 		System.out.println(beginEnd);
