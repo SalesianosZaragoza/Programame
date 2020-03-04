@@ -45,6 +45,10 @@ public class Problema1 {
 
 		Set<String> hashSet = new HashSet(lista);
 		hashSet.addAll(lista2);
+
+		List<String> subList = lista.subList(0, lista.indexOf("felipe"));
+		Collections.frequency(subList, subList);
+
 		hashSet.add("juan");
 
 		HashMap<String, String> map = new HashMap<>();
